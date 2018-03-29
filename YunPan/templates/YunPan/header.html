@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="cn-zh">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} 我的云盘 {% endblock %}</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">我的云盘</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="/public">公共区域</a></li>
+                <li><a href="/private">我的文件</a></li>
+                <li><a href="/upload">上传文件</a></li>
+                {#                <li class="dropdown">#}
+                {#                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">#}
+                {#                        Java#}
+                {#                        <b class="caret"></b>#}
+                {#                    </a>#}
+                {#                    <ul class="dropdown-menu">#}
+                {#                        <li><a href="#">jmeter</a></li>#}
+                {#                        <li><a href="#">EJB</a></li>#}
+                {#                        <li><a href="#">Jasper Report</a></li>#}
+                {#                        <li class="divider"></li>#}
+                {#                        <li><a href="#">分离的链接</a></li>#}
+                {#                        <li class="divider"></li>#}
+                {#                        <li><a href="#">另一个分离的链接</a></li>#}
+                {#                    </ul>#}
+                {#                </li>#}
+            </ul>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+
+                <li><a href="/"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+                <li><a href="{% url 'YunPan:logout' %}"><span class="glyphicon glyphicon-log-out"></span> 退出</a></li>
+
+
+            {% else %}
+                {#                <a href="{% url 'jplag:login' %}">login</a>#}
+                <li><a href="{% url 'YunPan:register' %}"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+                <li><a href="{% url 'YunPan:login' %}"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    {% block body %}
+    {% endblock %}
+</div>
+</body>
+</html>
