@@ -1,25 +1,45 @@
 {% extends 'YunPan/header.html' %}
 {% block body %}
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>文件</th>
-            <th>大小</th>
-            <th>上传时间</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody class="vertical-middle">
-        {% for file in files %}
+    <style>
+        .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+            vertical-align: top;
+        }
+
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td {
+            vertical-align: middle;
+        }
+
+        #contest-list-table .form-group {
+            margin-bottom: 0;
+        }
+
+        .main-bar {
+            margin: 16px 0;
+        }
+    </style>
+    <div id="blank" style="height: 50px;"></div>
+    <div class="container">
+        <table class="table table-striped table-bordered">
+            <thead>
             <tr>
-                <td name="file_name">{{ file.upload.name }}</td>
-                <td name="file_size">{{ file.upload.size }}</td>
-                <td>{{ file.upload_time }}</td>
-                <td>{{ file.id }}</td>
+                <th>文件</th>
+                <th>大小</th>
+                <th>上传时间</th>
+                <th>操作</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="vertical-middle">
+            {% for file in files %}
+                <tr>
+                    <td name="file_name">{{ file.upload.name }}</td>
+                    <td name="file_size">{{ file.upload.size }}</td>
+                    <td>{{ file.upload_time }}</td>
+                    <td>{{ file.id }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <script>
         $("[name='file_name']").each(function () {
             this.innerText = this.innerText.split('/').pop();
