@@ -1,0 +1,50 @@
+{% extends 'YunPan/header.html' %}
+{% block body %}
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>文件</th>
+            <th>大小</th>
+            <th>上传时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody class="vertical-middle">
+        {% for file in files %}
+            <tr>
+                <td name="file_name">{{ file.upload.name }}</td>
+                <td name="file_size">{{ file.upload.size }}</td>
+                <td>{{ file.upload_time }}</td>
+                <td>{{ file.id }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        $("[name='file_name']").each(function () {
+            this.innerText = this.innerText.split('/').pop();
+        });
+
+        function formatFileSize(fileSize) {
+            if (fileSize < 1024) {
+                return fileSize + 'B';
+            } else if (fileSize < (1024 * 1024)) {
+                var temp = fileSize / 1024;
+                temp = temp.toFixed(2);
+                return temp + 'KB';
+            } else if (fileSize < (1024 * 1024 * 1024)) {
+                var temp = fileSize / (1024 * 1024);
+                temp = temp.toFixed(2);
+                return temp + 'MB';
+            } else {
+                var temp = fileSize / (1024 * 1024 * 1024);
+                temp = temp.toFixed(2);
+                return temp + 'GB';
+            }
+        }
+
+        $("[name='file_size").each(function () {
+            this.innerText = formatFileSize(this.innerText / 1);
+        })
+    </script>
+{% endblock %}
