@@ -11,6 +11,7 @@ urlpatterns = [
     path('public/', views.public, name='public'),
     path('private/', views.private, name='private'),
     path('file/<int:pk>/', views.download_file, name='file'),
+    path('download/<int:pk>/', views.download_private_file, name='download'),
     path('move/<int:pk>/', views.change_file_type, name='move'),
     path('delete/<int:pk>/', views.delete_file, name='delete'),
     path('login/', views.login, name='login'),

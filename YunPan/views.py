@@ -47,7 +47,19 @@ def delete_file(request, pk):
 @login_required
 def download_private_file(request, pk):
     file = UploadFile.objects.get(user=request.user, id=pk)
-    pass
+
+    def file_iterator(chunk_size=512):
+        while True:
+            c = file.upload.read(chunk_size)
+            if c:
+                yield c
+            else:
+                break
+
+    response = StreamingHttpResponse(file_iterator())
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="%s"' % quote(file.upload.name.split('/')[-1])
+    return response
 
 
 def download_file(request, pk):
