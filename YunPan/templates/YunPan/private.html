@@ -83,7 +83,7 @@
             $.get("/move/" + id + "/", function (rst, state) {
                 if (state === 'success') {
                     var this_file_type = $("#file_type_" + id);
-                    if (this_file_type.text() === '私有') {
+                    if (this_file_type.text().indexOf('私有') !== -1) {
                         this_file_type.text('公共');
                         this_file_type.css('background-color', '#5bc0de');
                         this_file_type.css('border-color', '#46b8da');
