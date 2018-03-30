@@ -21,12 +21,32 @@ def public(request):
 
 @login_required
 def private(request):
-    files = UploadFile.objects.filter(user=request.user, file_type='private')
+    files = UploadFile.objects.filter(user=request.user)
     return render(request, 'YunPan/private.html', {'files': files})
 
 
 @login_required
-def delete_file(request):
+def change_file_type(request, pk):
+    file = UploadFile.objects.get(user=request.user, id=pk)
+    if file.file_type == 'public':
+        file.file_type = 'private'
+    elif file.file_type == 'private':
+        file.file_type = 'public'
+    file.save()
+    return render(request, 'YunPan/message.html', {'message': '移动成功'})
+
+
+@login_required
+def delete_file(request, pk):
+    file = UploadFile.objects.get(user=request.user, id=pk)
+    file.upload.delete()
+    file.delete()
+    return render(request, 'YunPan/message.html', {'message': '删除成功'})
+
+
+@login_required
+def download_private_file(request, pk):
+    file = UploadFile.objects.get(user=request.user, id=pk)
     pass
 
 

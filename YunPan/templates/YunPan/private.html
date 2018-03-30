@@ -34,7 +34,13 @@
                     <td name="file_name">{{ file.upload.name }}</td>
                     <td name="file_size">{{ file.upload.size }}</td>
                     <td>{{ file.upload_time }}</td>
-                    <td>{{ file.id }}</td>
+                    <td>{% if file.file_type == 'public' %}
+                        <button onclick="move_file({{ file.id }})" class="btn btn-info" id="file_type">公共</button>
+                    {% else %}
+                        <button onclick="move_file({{ file.id }})" class="btn btn-warning" id="file_type">私有</button>
+                    {% endif %}
+                        <button onclick="delete_file({{ file.id }})" class="btn btn-danger">删除</button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -66,5 +72,29 @@
         $("[name='file_size").each(function () {
             this.innerText = formatFileSize(this.innerText / 1);
         })
+
+        function move_file(id) {
+            $.get("/move/" + id + "/", function (rst, state) {
+                if (state === 'success') {
+                    if ($("#file_type").text() === '私有') {
+                        $("#file_type").text('公共');
+                        $("#file_type").css('background-color', '#5bc0de');
+                        $("#file_type").css('border-color', '#46b8da');
+                    } else {
+                        $("#file_type").text('私有');
+                        $("#file_type").css('background-color', '#f0ad4e');
+                        $("#file_type").css('border-color', '#eea236');
+                    }
+                }
+            })
+        }
+
+        function delete_file(id) {
+            $.get("/delete/" + id + "/", function (rst, state) {
+                if (state === 'success') {
+                    location.reload();
+                }
+            })
+        }
     </script>
 {% endblock %}
