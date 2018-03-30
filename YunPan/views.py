@@ -6,7 +6,7 @@ from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from urllib.parse import quote
 
-from .models import UploadFile
+from .models import UploadFile, ContentType
 from .forms import UploadFileForm
 
 
@@ -56,8 +56,10 @@ def download_private_file(request, pk):
             else:
                 break
 
-    response = StreamingHttpResponse(file_iterator())
-    response['Content-Type'] = 'application/octet-stream'
+    # response = StreamingHttpResponse(file_iterator())
+    response = HttpResponse(file.upload)
+    # response['Content-Type'] = 'application/octet-stream'
+    response['Content-Type'] = ContentType[file.upload.name.split('.')[-1]]
     response['Content-Disposition'] = 'attachment;filename="%s"' % quote(file.upload.name.split('/')[-1])
     return response
 
@@ -75,8 +77,10 @@ def download_file(request, pk):
             else:
                 break
 
-    response = StreamingHttpResponse(file_iterator())
-    response['Content-Type'] = 'application/octet-stream'
+    # response = StreamingHttpResponse(file_iterator())
+    response = HttpResponse(file.upload)
+    # response['Content-Type'] = 'application/octet-stream'
+    response['Content-Type'] = ContentType[file.upload.name.split('.')[-1]]
     response['Content-Disposition'] = 'attachment;filename="%s"' % quote(file.upload.name.split('/')[-1])
     return response
 
