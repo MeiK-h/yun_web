@@ -35,15 +35,19 @@
                     <td name="file_size">{{ file.upload.size }}</td>
                     <td>{{ file.upload_time }}</td>
                     <td>
-                        <button class="btn btn-info"><a href="{% url 'YunPan:download' pk=file.id %}" style="color:#fff">下载</a></button>
-                        {% if file.file_type == 'public' %}
-                            <button onclick="move_file({{ file.id }})" class="btn btn-info"
-                                    id="file_type_{{ file.id }}">公共
-                            </button>
-                        {% else %}
-                            <button onclick="move_file({{ file.id }})" class="btn btn-warning"
-                                    id="file_type_{{ file.id }}">私有
-                            </button>
+                        <a href="{% url 'YunPan:download' pk=file.id %}" style="color:#fff">
+                            <button class="btn btn-info">下载</button>
+                        </a>
+                        {% if file.file_type != 'media' %}
+                            {% if file.file_type == 'public' %}
+                                <button onclick="move_file({{ file.id }})" class="btn btn-info"
+                                        id="file_type_{{ file.id }}">公共
+                                </button>
+                            {% else %}
+                                <button onclick="move_file({{ file.id }})" class="btn btn-warning"
+                                        id="file_type_{{ file.id }}">私有
+                                </button>
+                            {% endif %}
                         {% endif %}
                         <button onclick="delete_file({{ file.id }})" class="btn btn-danger">删除</button>
                     </td>
@@ -97,6 +101,8 @@
         }
 
         function delete_file(id) {
+            if (!confirm("您确定删除此文件吗？"))
+                return;
             $.get("/delete/" + id + "/", function (rst, state) {
                 if (state === 'success') {
                     location.reload();

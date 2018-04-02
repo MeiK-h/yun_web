@@ -57,11 +57,18 @@
                         <li><a href="{% url 'YunPan:public' %}">公共区域</a></li>
                         <li><a href="{% url 'YunPan:private' %}">我的文件</a></li>
                         <li><a href="{% url 'YunPan:upload' %}">上传文件</a></li>
+                        <li><a href="/media/" target="_blank">媒体文件</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}
-                            <li><a href="/"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a>
-                            </li>
+                            {% if user.is_superuser %}
+                                <li><a href="/admin/" target="_blank"><span
+                                        class="glyphicon glyphicon-user"></span> {{ user.username }}
+                                </a>
+                                    {% else %}
+                                <li><a href="/"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a>
+                            {% endif %}
+                        </li>
                             <li><a href="{% url 'YunPan:logout' %}"><span class="glyphicon glyphicon-log-out"></span> 退出</a>
                             </li>
                         {% else %}

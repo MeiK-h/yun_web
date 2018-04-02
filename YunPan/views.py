@@ -15,13 +15,13 @@ def index(request):
 
 
 def public(request):
-    files = UploadFile.objects.filter(file_type='public')
+    files = UploadFile.objects.filter(file_type='public')[::-1]
     return render(request, 'YunPan/public.html', {'files': files})
 
 
 @login_required
 def private(request):
-    files = UploadFile.objects.filter(user=request.user)
+    files = UploadFile.objects.filter(user=request.user)[::-1]
     return render(request, 'YunPan/private.html', {'files': files})
 
 
@@ -56,9 +56,7 @@ def download_private_file(request, pk):
             else:
                 break
 
-    # response = StreamingHttpResponse(file_iterator())
-    response = HttpResponse(file.upload)
-    # response['Content-Type'] = 'application/octet-stream'
+    response = StreamingHttpResponse(file_iterator())
     response['Content-Type'] = ContentType.get(file.upload.name.split('.')[-1], 'application/octet-stream')
     response['Content-Disposition'] = 'attachment;filename="%s"' % quote(file.upload.name.split('/')[-1])
     return response
@@ -77,9 +75,7 @@ def download_file(request, pk):
             else:
                 break
 
-    # response = StreamingHttpResponse(file_iterator())
-    response = HttpResponse(file.upload)
-    # response['Content-Type'] = 'application/octet-stream'
+    response = StreamingHttpResponse(file_iterator())
     response['Content-Type'] = ContentType.get(file.upload.name.split('.')[-1], 'application/octet-stream')
     response['Content-Disposition'] = 'attachment;filename="%s"' % quote(file.upload.name.split('/')[-1])
     return response

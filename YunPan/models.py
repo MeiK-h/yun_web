@@ -2,13 +2,22 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 
+def upload_path(instance, filename):
+    if instance.file_type == 'media':
+        path = 'media'
+    else:
+        path = str(instance.user.id)
+    return '{0}/{1}'.format(path, filename)
+
+
 class UploadFile(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)  # 所属用户
-    upload = models.FileField(upload_to='%Y/%m/')
+    upload = models.FileField(upload_to=upload_path)
 
     file_type_choices = (
         ('private', '私有文件'),
-        ('public', '公共文件')
+        ('public', '公共文件'),
+        ('media', '媒体文件')
     )
     file_type = models.CharField(max_length=15, choices=file_type_choices, default=file_type_choices[0][0])  # 文件类型
 
