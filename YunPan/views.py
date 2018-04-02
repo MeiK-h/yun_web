@@ -59,7 +59,7 @@ def download_private_file(request, pk):
     # response = StreamingHttpResponse(file_iterator())
     response = HttpResponse(file.upload)
     # response['Content-Type'] = 'application/octet-stream'
-    response['Content-Type'] = ContentType[file.upload.name.split('.')[-1]]
+    response['Content-Type'] = ContentType.get(file.upload.name.split('.')[-1], 'application/octet-stream')
     response['Content-Disposition'] = 'attachment;filename="%s"' % quote(file.upload.name.split('/')[-1])
     return response
 
@@ -80,7 +80,7 @@ def download_file(request, pk):
     # response = StreamingHttpResponse(file_iterator())
     response = HttpResponse(file.upload)
     # response['Content-Type'] = 'application/octet-stream'
-    response['Content-Type'] = ContentType[file.upload.name.split('.')[-1]]
+    response['Content-Type'] = ContentType.get(file.upload.name.split('.')[-1], 'application/octet-stream')
     response['Content-Disposition'] = 'attachment;filename="%s"' % quote(file.upload.name.split('/')[-1])
     return response
 
