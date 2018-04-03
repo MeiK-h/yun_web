@@ -1,4 +1,24 @@
 {% extends 'YunPan/header.html' %}
+{% block body_top %}
+    <div class="modal fade" id="view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="view_title">View</h4>
+                </div>
+                <div class="modal-body" id="view_body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 {% block body %}
     <style>
         .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
@@ -31,7 +51,13 @@
             <tbody class="vertical-middle">
             {% for file in files %}
                 <tr>
-                    <td><a href="{% url 'YunPan:file' pk=file.id %}" name="file_name">{{ file.upload.name }}</a></td>
+                    <td><a href="{% url 'YunPan:file' pk=file.id %}" name="file_name">{{ file.upload.name }}</a>
+                        {% if file.file_type == 'media' %}
+                            <button class="btn btn-sm"
+                                    onclick="view_media('{{ file.upload.url }}', '{{ file.upload.name }}')">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        {% endif %}
+                    </td>
                     <td name="file_size">{{ file.upload.size }}</td>
                     <td>{{ file.user.username }}</td>
                     <td>{{ file.upload_time }}</td>
@@ -65,6 +91,23 @@
 
         $("[name='file_size").each(function () {
             this.innerText = formatFileSize(this.innerText / 1);
-        })
+        });
+
+        var img_type = ['bmp', 'jpg', 'png', 'tiff', 'gif', 'webp'];
+        var video_type = ['mp4', 'ogg', 'webm'];
+
+        function view_media(url, name) {
+            $("#view_title").text(name.split('/').pop());
+            var file_type = url.split('.').pop().toLowerCase();
+            var view_node = '';
+            if ($.inArray(file_type, img_type) >= 0) {
+                view_node = '<img src="' + url + '" width=567px></img>';
+            }
+            else if ($.inArray(file_type, video_type) >= 0) {
+                view_node = '<video src="' + url + '" autoplay width="567px" controls></video>';
+            }
+            $("#view_body").html(view_node);
+            $("#view").modal('show');
+        }
     </script>
 {% endblock %}

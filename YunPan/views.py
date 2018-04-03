@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from urllib.parse import quote
+from django.db.models import Q
 
 from .models import UploadFile, ContentType
 from .forms import UploadFileForm
@@ -15,7 +16,7 @@ def index(request):
 
 
 def public(request):
-    files = UploadFile.objects.filter(file_type='public')[::-1]
+    files = UploadFile.objects.filter(Q(file_type='public') | Q(file_type='media'))[::-1]
     return render(request, 'YunPan/public.html', {'files': files})
 
 
