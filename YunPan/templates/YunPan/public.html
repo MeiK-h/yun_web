@@ -94,6 +94,7 @@
         });
 
         var img_type = ['bmp', 'jpg', 'png', 'tiff', 'gif', 'webp'];
+        var audio_type = ['ogg', 'mp4', 'wav'];
         var video_type = ['mp4', 'ogg', 'webm'];
 
         function view_media(url, name) {
@@ -105,6 +106,9 @@
             }
             else if ($.inArray(file_type, video_type) >= 0) {
                 view_node = '<video src="' + url + '" autoplay width="567px" controls></video>';
+            }
+            else if ($.inArray(file_type, audio_type) >= 0) {
+                view_node = '<audio src="' + url + '" autoplay width="567px" controls></audio>';
             }
             $("#view_body").html(view_node);
             $("#view").modal('show');
